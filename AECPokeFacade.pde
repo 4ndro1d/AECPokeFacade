@@ -1,7 +1,13 @@
+import processing.sound.*;
 
 AEC aec;
 PFont font;
 PogoHelper pogo;
+
+SoundFile levelUp;
+SoundFile battle;
+
+boolean isBattlePlaying = false;
 
 String teamColor = "";
 boolean inBattle = false;
@@ -12,12 +18,13 @@ void setup() {
   frameRate(25);
   size(1200, 400);
 
+  levelUp = new SoundFile(this, "chipquest.wav");
+  battle = new SoundFile(this, "115-battle-vs-trainer-.mp3");
+
   font = createFont("Arial", 26);
   textFont(font);
   numbers = new float[72];
-  for (int i = 0; i < 72; i ++) {
-    numbers[i] = random(2, 24);
-  }
+  newRndNumbers();
 
   aec = new AEC();
   aec.init();
@@ -31,10 +38,17 @@ void newRndNumbers() {
 }
 
 void setGymLevel(int i) {
+  if (gymLevel != 0 && i > gymLevel) 
+    levelUp.play();
+
   gymLevel = i;
 }
 
 void setInBattle(boolean b) {
+  if (b && b != inBattle)
+    battle.play();
+  if (!b && b != inBattle)
+    battle.stop();
   inBattle = b;
 }
 
@@ -128,11 +142,11 @@ void draw() {
       rect(i, 0, 1, numbers[i]);
     }
   } else {
-    if (!teamColor.isEmpty()) {
+    if (gymLevel > 0) {
       fill(0, 0, 0);
       textAlign(LEFT, CENTER);
       pushMatrix();
-      
+
       if (gymLevel >= 10) {
         scale(0.325, 0.8);
         text(gymLevel, 60, 10);
