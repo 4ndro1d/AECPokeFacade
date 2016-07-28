@@ -4,9 +4,9 @@ class PogoHelper implements AECInfoListener {
 
   public PogoHelper(AECPokeFacade s) {
     facade = s;
-     PokeGoHelper.registerListener(this); 
-     PokeGoHelper.startAECInfoFetch();
-    //dummyRoutine();
+    //PokeGoHelper.registerListener(this); 
+    //PokeGoHelper.startAECInfoFetch();
+    dummyRoutine();
   }
 
   void dummyRoutine() {
