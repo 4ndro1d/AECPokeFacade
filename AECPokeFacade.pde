@@ -7,8 +7,6 @@ PogoHelper pogo;
 SoundFile levelUp;
 SoundFile battle;
 
-boolean isBattlePlaying = false;
-
 String teamColor = "";
 boolean inBattle = false;
 int gymLevel;
@@ -121,12 +119,15 @@ void draw() {
   switch(teamColor) {
   case "BLUE":
     backgroundBlue();
+    fillRed();
     break;
   case "RED":   
     backgroundRed();
+    fillYellow();
     break; 
   case "YELLOW":
     backgroundYellow();
+    fillBlue();
     break;
   default: 
     drawNeutral();
@@ -134,7 +135,7 @@ void draw() {
   noStroke();
 
   if (inBattle) {
-    fill (255, 255, 255);
+    fill (0, 0, 0);
 
     for (int i = 0; i < 72; i ++) {
       if (frameCount % 7 == 0)       
@@ -143,7 +144,7 @@ void draw() {
     }
   } else {
     if (gymLevel > 0) {
-      fill(0, 0, 0);
+     
       textAlign(LEFT, CENTER);
       pushMatrix();
 
