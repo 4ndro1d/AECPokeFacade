@@ -1,4 +1,4 @@
-import processing.sound.*; //<>// //<>// //<>// //<>// //<>// //<>//
+import processing.sound.*; //<>//
 
 AEC aec;
 PFont font;
@@ -19,9 +19,9 @@ Direction spiralD = Direction.DOWN;
 int spiralW = 10;
 int spiralH = 20;
 int spiralI = 0;
-
+int waitTime = 500;
 int alpha = 0;
-int aD = 5;
+int aD = 2;
 
 int countTime = 0;
 boolean passedTimeToShowBall = false;
@@ -36,32 +36,42 @@ void setup() {
   frameRate(25);
   size(1200, 400);
 
-  levelUp = new SoundFile(this, "chipquest.wav");
+  levelUp = new SoundFile(this, "levelup.mp3");
   battle = new SoundFile(this, "115-battle-vs-trainer-.mp3");
 
   font = createFont("Arial", 26);
   textFont(font);
   numbers = new float[72];
-  newRndNumbers();
+  newRndNumbers(true);
 
   aec = new AEC();
   aec.init();
   thread("PokeInfoThread");
 }
 
-void newRndNumbers() {
+void newRndNumbers(boolean init) {
   for (int i = 0; i < 40; i ++) {
-    numbers[i] = random(2, 20);
+    if (init) {
+      numbers[i] = random(2, 20);
+    } else {
+      numbers[i] += random(-1, 1);
+      if (numbers[i] < 3 || numbers[i] > 19)
+        numbers[i] = random(2, 20);
+    }
   }
 }
 
 void setGymLevel(int i) {
-  if (gymLevel != 0 && i > gymLevel) 
+  if (i > gymLevel)   
     levelUp.play();
+  if (i != gymLevel)
+    stopPokeTransition();
   gymLevel = i;
 }
 
 void setServerUnreachable(boolean b) {
+  if (b != serverUnreachable)
+    stopPokeTransition();
   serverUnreachable = b;
 }
 
@@ -80,7 +90,11 @@ void stopBattle() {
   battle.stop();
   stopBattleSpiral();
 }
-
+void stopPokeTransition() {
+  alpha = 0;
+  countTime = 0;
+  passedTimeToShowBall = false;
+}
 void stopBattleSpiral() {
   spiralX = 0;
   spiralY = 0;
@@ -133,9 +147,9 @@ void fillGreen() {
 
 void drawNeutral() {
   background(255, 255, 255);
-  drawPokeBall(14, 0, 0, 0, 255, true);
-  drawPokeBall(24, 0, 0, 0, 255, true);
-  drawPokeBall(34, 0, 0, 0, 255, true);
+  drawPokeBall(14, 0, 0, 0, 255);
+  drawPokeBall(24, 0, 0, 0, 255);
+  drawPokeBall(34, 0, 0, 0, 255);
 }
 
 void drawColorSpiral() {
@@ -172,43 +186,29 @@ void drawPokeBallTransition() {
     if (alpha <= 0) {
       alpha = 0;
       aD *= -1;
+      stopPokeTransition();
     }
-    if (alpha >= 255) {
-      alpha = 255;
+    if (alpha > 500)
       aD *= -1;
-    }
-
 
     background(red(b), green(b), blue(b), alpha);
-    drawPokeBall(14, 0, 0, 0, alpha, true);
-    drawPokeBall(24, 0, 0, 0, alpha, true);
-    drawPokeBall(34, 0, 0, 0, alpha, true);
+    drawPokeBall(14, 0, 0, 0, alpha);
+    drawPokeBall(24, 0, 0, 0, alpha);
+    drawPokeBall(34, 0, 0, 0, alpha);
   }
 }
 
-void drawPokeBall(int x, int r, int g, int b, int a, boolean outline) {
+void drawPokeBall(int x, int r, int g, int b, int a) {
   int w = 8;
   int y = 10;
-  outline = true;
 
-  if (outline) {
-    fill(r, g, b, a);
-    rect(x - 4, y - 5, w + 2, 4);
-    rect(x - 3, y - 7, w, 3);
-    rect(x - 2, y - 9, w - 2, 3);
-
-    rect(x - 4, y, w + 2, 4);
-    rect(x - 3, y + 3, w, 3);
-    rect(x - 2, y + 5, w - 2, 3);
-
-    rect(x - 4, y - 1, w + 2, 1);
-  }
+  fill(r, g, b, a);
+  rect(x - 4, 0, 10, 20);
 
   fill (255, 0, 0, a);
   rect(x - 3, y - 4, w, 3);
   rect(x - 2, y - 6, w - 2, 2);
   rect(x - 1, y - 7, w - 4, 1);
-
 
   fill (255, 255, 255, a);
   rect(x - 3, y, w, 3);
@@ -217,14 +217,13 @@ void drawPokeBall(int x, int r, int g, int b, int a, boolean outline) {
 
   fill(r, g, b, a);
   rect(x, y - 2, 2, 3);
-  rect(x - 4 ,0 ,10,20);
 }
 
 void drawEqualizer() {
-  fill (0, 0, 0);
-  for (int i = 0; i < 72; i ++) {
-    if (frameCount % 7 == 0)       
-      newRndNumbers();
+  fill (0, 0, 0, 200);
+  for (int i = 0; i < 40; i ++) {
+    if (frameCount % 10 == 0)       
+      newRndNumbers(false);
     rect(i, 0, 1, numbers[i]);
   }
 }
@@ -317,9 +316,9 @@ Rect horizontalRect(int x, int y) {
 
 void drawServerUnreachable() {
   backgroundGreen();
-  drawPokeBall(14, 88, 133, 40, 255, false);
-  drawPokeBall(24, 88, 133, 40, 255, false);
-  drawPokeBall(34, 88, 133, 40, 255, false);
+  drawPokeBall(14, 88, 133, 40, 255);
+  drawPokeBall(24, 88, 133, 40, 255);
+  drawPokeBall(34, 88, 133, 40, 255);
 }
 
 void drawGymLevel() {
@@ -328,9 +327,9 @@ void drawGymLevel() {
     pushMatrix();
     if (gymLevel >= 10) {
       scale(0.325, 0.8);
-      text(gymLevel, 30, 10);
+      text(gymLevel, 29, 10);
       text(gymLevel, 60, 10);
-      text(gymLevel, 90, 10);
+      text(gymLevel, 91, 10);
     } else {
       scale(0.5, 0.8);
       text(gymLevel, 22, 10);
@@ -361,17 +360,19 @@ void drawTeamColors() {
 }
 
 void drawNormal() {
-  //if (!passedTimeToShowBall) {
   drawTeamColors();
-  //countTime++;
-  //if (countTime > 100){
-  //  passedTimeToShowBall = true;
-  //}
-  //} else {
-  //drawServerUnreachable();
-  //}
-  //  drawPokeBallTransition();
-  drawGymLevel();
+
+  countTime++;
+  if (countTime > waitTime) {
+    passedTimeToShowBall = true;
+  }
+
+  if (!passedTimeToShowBall) {
+    drawGymLevel();
+  } else {
+    if (!teamColor.equals("NEUTRAL"))
+      drawPokeBallTransition();
+  }
 }
 
 void draw() {
