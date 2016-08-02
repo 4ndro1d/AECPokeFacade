@@ -586,7 +586,7 @@ class PogoHelper implements AECInfoListener {
   public PogoHelper(AECPokeFacade s) {
     facade = s;   
 
-    //dummyRoutine();
+    dummyRoutine();
     //dummyRoutine();
     //dummyRoutine();
 
@@ -693,7 +693,7 @@ public class Rect {
 }
   public void settings() {  size(1200, 400); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "--present", "--window-color=#666666", "--stop-color=#cccccc", "AECPokeFacade" };
+    String[] appletArgs = new String[] { "AECPokeFacade" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
