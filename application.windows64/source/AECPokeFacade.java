@@ -3,7 +3,6 @@ import processing.data.*;
 import processing.event.*; 
 import processing.opengl.*; 
 
-import processing.sound.*; 
 import java.awt.Color; 
 
 import alldev.aec.*; 
@@ -71,14 +70,14 @@ import java.io.IOException;
 
 public class AECPokeFacade extends PApplet {
 
-
+//import processing.sound.*;
 
 AEC aec;
 PFont font;
 PogoHelper pogo;
 
-SoundFile levelUp;
-SoundFile battle;
+//SoundFile levelUp;
+//SoundFile battle;
 
 String teamColor;
 boolean inBattle;
@@ -109,8 +108,8 @@ public void setup() {
   frameRate(25);
   
 
-  levelUp = new SoundFile(this, "levelup.mp3");
-  battle = new SoundFile(this, "115-battle-vs-trainer-.mp3");
+  //levelUp = new SoundFile(this, "levelup.mp3");
+  //battle = new SoundFile(this, "115-battle-vs-trainer-.mp3");
 
   font = createFont("Arial", 26);
   textFont(font);
@@ -136,7 +135,7 @@ public void newRndNumbers(boolean init) {
 
 public void setGymLevel(int i) {
   if (i > gymLevel)   
-    levelUp.play();
+    //levelUp.play();
   if (i != gymLevel)
     stopPokeTransition();
   gymLevel = i;
@@ -150,8 +149,9 @@ public void setServerUnreachable(boolean b) {
 
 public void setInBattle(boolean b) {
   if (b && b != inBattle) {
-    battle.play();
+    //battle.play();
     drawBattleSpiral = true;
+    stopPokeTransition();
   }
   if (!b && b != inBattle) {
     stopBattle();
@@ -160,14 +160,16 @@ public void setInBattle(boolean b) {
 }
 
 public void stopBattle() {
-  battle.stop();
+  //battle.stop();
   stopBattleSpiral();
 }
 public void stopPokeTransition() {
   alpha = 0;
   countTime = 0;
+  aD = 2;
   passedTimeToShowBall = false;
 }
+
 public void stopBattleSpiral() {
   spiralX = 0;
   spiralY = 0;
@@ -256,7 +258,7 @@ public void drawPokeBallTransition() {
   if (!inBattle) {
     int b = g.backgroundColor;
     alpha += aD;
-    if (alpha <= 0) {
+    if (alpha < 0) {
       alpha = 0;
       aD *= -1;
       stopPokeTransition();
@@ -586,8 +588,8 @@ class PogoHelper implements AECInfoListener {
   public PogoHelper(AECPokeFacade s) {
     facade = s;   
 
-    //dummyRoutine();
-    //dummyRoutine();
+    dummyRoutine();
+    dummyRoutine();
     //dummyRoutine();
 
     AECPokeInfo info = new AECPokeInfo();
@@ -610,13 +612,17 @@ class PogoHelper implements AECInfoListener {
     dummyServerUnreachable();
     sleep(5000);
     AECInfoUpdated(dummyInfo(false, "", 0));
-    sleep(2000);
+    sleep(5000);
     AECInfoUpdated(dummyInfo(false, "BLUE", 1));
     sleep(40000);
     AECInfoUpdated(dummyInfo(true, "BLUE", 1));    
-    sleep(25000);
+    sleep(35000);
     AECInfoUpdated(dummyInfo(false, "BLUE", 2));    
     sleep(25000);
+    facade.setServerUnreachable(true);
+    sleep(15000);
+    facade.setServerUnreachable(true);
+    sleep(10000);
     AECInfoUpdated(dummyInfo(true, "BLUE", 1));
     sleep(10000);
     AECInfoUpdated(dummyInfo(false, "BLUE", 1));
@@ -683,6 +689,7 @@ class PogoHelper implements AECInfoListener {
     }
   }
 }
+
 public class Rect {
   
   int x;
@@ -693,7 +700,7 @@ public class Rect {
 }
   public void settings() {  size(1200, 400); }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "--present", "--window-color=#666666", "--stop-color=#cccccc", "AECPokeFacade" };
+    String[] appletArgs = new String[] { "AECPokeFacade" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {

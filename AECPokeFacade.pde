@@ -1,11 +1,11 @@
-import processing.sound.*; //<>//
+//import processing.sound.*; //<>//
 
 AEC aec;
 PFont font;
 PogoHelper pogo;
 
-SoundFile levelUp;
-SoundFile battle;
+//SoundFile levelUp;
+//SoundFile battle;
 
 String teamColor;
 boolean inBattle;
@@ -36,8 +36,8 @@ void setup() {
   frameRate(25);
   size(1200, 400);
 
-  levelUp = new SoundFile(this, "levelup.mp3");
-  battle = new SoundFile(this, "115-battle-vs-trainer-.mp3");
+  //levelUp = new SoundFile(this, "levelup.mp3");
+  //battle = new SoundFile(this, "115-battle-vs-trainer-.mp3");
 
   font = createFont("Arial", 26);
   textFont(font);
@@ -63,7 +63,7 @@ void newRndNumbers(boolean init) {
 
 void setGymLevel(int i) {
   if (i > gymLevel)   
-    levelUp.play();
+    //levelUp.play();
   if (i != gymLevel)
     stopPokeTransition();
   gymLevel = i;
@@ -77,8 +77,9 @@ void setServerUnreachable(boolean b) {
 
 void setInBattle(boolean b) {
   if (b && b != inBattle) {
-    battle.play();
+    //battle.play();
     drawBattleSpiral = true;
+    stopPokeTransition();
   }
   if (!b && b != inBattle) {
     stopBattle();
@@ -87,14 +88,16 @@ void setInBattle(boolean b) {
 }
 
 void stopBattle() {
-  battle.stop();
+  //battle.stop();
   stopBattleSpiral();
 }
 void stopPokeTransition() {
   alpha = 0;
   countTime = 0;
+  aD = 2;
   passedTimeToShowBall = false;
 }
+
 void stopBattleSpiral() {
   spiralX = 0;
   spiralY = 0;
@@ -183,7 +186,7 @@ void drawPokeBallTransition() {
   if (!inBattle) {
     int b = g.backgroundColor;
     alpha += aD;
-    if (alpha <= 0) {
+    if (alpha < 0) { //<>//
       alpha = 0;
       aD *= -1;
       stopPokeTransition();
