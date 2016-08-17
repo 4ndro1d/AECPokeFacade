@@ -12,8 +12,6 @@ import com.squareup.moshi.*;
 import com.annimon.stream.*; 
 import com.annimon.stream.function.*; 
 import com.annimon.stream.function.ints.*; 
-import com.google.protobuf.*; 
-import com.google.protobuf.compiler.*; 
 import okhttp3.*; 
 import okhttp3.internal.*; 
 import okhttp3.internal.cache.*; 
@@ -23,17 +21,41 @@ import okhttp3.internal.http.*;
 import okhttp3.internal.io.*; 
 import okhttp3.internal.platform.*; 
 import okhttp3.internal.tls.*; 
+import com.google.protobuf.*; 
+import com.google.protobuf.compiler.*; 
+import rx.*; 
+import rx.annotations.*; 
+import rx.exceptions.*; 
+import rx.functions.*; 
+import rx.internal.operators.*; 
+import rx.internal.producers.*; 
+import rx.internal.schedulers.*; 
+import rx.internal.util.*; 
+import rx.internal.util.atomic.*; 
+import rx.internal.util.unsafe.*; 
+import rx.observables.*; 
+import rx.observers.*; 
+import rx.plugins.*; 
+import rx.schedulers.*; 
+import rx.singles.*; 
+import rx.subjects.*; 
+import rx.subscriptions.*; 
+import net.jpountz.lz4.*; 
+import net.jpountz.util.*; 
+import net.jpountz.xxhash.*; 
+import net.iharder.*; 
+import com.pokegoapi.api.device.*; 
 import com.pokegoapi.api.gym.*; 
 import com.pokegoapi.api.inventory.*; 
 import com.pokegoapi.api.map.fort.*; 
 import com.pokegoapi.api.map.*; 
 import com.pokegoapi.api.map.pokemon.*; 
+import com.pokegoapi.api.map.pokemon.encounter.*; 
 import com.pokegoapi.api.player.*; 
 import com.pokegoapi.api.pokemon.*; 
 import com.pokegoapi.api.*; 
 import com.pokegoapi.api.settings.*; 
 import com.pokegoapi.auth.*; 
-import com.pokegoapi.examples.*; 
 import com.pokegoapi.exceptions.*; 
 import com.pokegoapi.google.common.geometry.*; 
 import com.pokegoapi.main.*; 
@@ -76,8 +98,8 @@ AEC aec;
 PFont font;
 PogoHelper pogo;
 
-//SoundFile levelUp;
-//SoundFile battle;
+// levelUp;
+// SoundFile battle;
 
 String teamColor;
 boolean inBattle;
@@ -108,8 +130,8 @@ public void setup() {
   frameRate(25);
   
 
-  //levelUp = new SoundFile(this, "levelup.mp3");
-  //battle = new SoundFile(this, "115-battle-vs-trainer-.mp3");
+//  levelUp = new SoundFile(this, "levelup.mp3");
+//  battle = new SoundFile(this, "115-battle-vs-trainer-.mp3");
 
   font = createFont("Arial", 26);
   textFont(font);
@@ -135,7 +157,7 @@ public void newRndNumbers(boolean init) {
 
 public void setGymLevel(int i) {
   if (i > gymLevel)   
-    //levelUp.play();
+//    levelUp.play();
   if (i != gymLevel)
     stopPokeTransition();
   gymLevel = i;
@@ -149,7 +171,7 @@ public void setServerUnreachable(boolean b) {
 
 public void setInBattle(boolean b) {
   if (b && b != inBattle) {
-    //battle.play();
+//    battle.play();
     drawBattleSpiral = true;
     stopPokeTransition();
   }
@@ -160,7 +182,7 @@ public void setInBattle(boolean b) {
 }
 
 public void stopBattle() {
-  //battle.stop();
+//  battle.stop();
   stopBattleSpiral();
 }
 public void stopPokeTransition() {
@@ -588,8 +610,8 @@ class PogoHelper implements AECInfoListener {
   public PogoHelper(AECPokeFacade s) {
     facade = s;   
 
-    dummyRoutine();
-    dummyRoutine();
+    //dummyRoutine();
+    //dummyRoutine();
     //dummyRoutine();
 
     AECPokeInfo info = new AECPokeInfo();
@@ -693,7 +715,6 @@ class PogoHelper implements AECInfoListener {
     }
   }
 }
-
 public class Rect {
   
   int x;

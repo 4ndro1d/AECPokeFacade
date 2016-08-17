@@ -7,8 +7,8 @@ class PogoHelper implements AECInfoListener {
   public PogoHelper(AECPokeFacade s) {
     facade = s;   
 
-    dummyRoutine();
-    dummyRoutine();
+    //dummyRoutine();
+    //dummyRoutine();
     //dummyRoutine();
 
     AECPokeInfo info = new AECPokeInfo();
