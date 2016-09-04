@@ -4,6 +4,9 @@ Processing Example to control the facade of the Ars Electronica Center by using 
 #First setup
 Please read carefully when trying to setup this sketch.
 
+##UPDATE
+Google Login is disabled for the moment and we are using PTC login. For this reason the refreshToken.txt file is not needed anymore.
+
 ##Option 1
 Copy the refreshToken.txt file from the repository in the the root directory of your Processing folder. Run the sketch by opening the file AECPokeFacade.pde with the Processing IDE.
 
