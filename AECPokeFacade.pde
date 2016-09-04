@@ -19,9 +19,14 @@ Direction spiralD = Direction.DOWN;
 int spiralW = 10;
 int spiralH = 20;
 int spiralI = 0;
+
+
 int waitTime = 500;
 int alpha = 0;
 int aD = 2;
+
+int unreachAlpha = 255;
+int unreachAD = 1;
 
 int countTime = 0;
 boolean passedTimeToShowBall = false;
@@ -150,9 +155,9 @@ void fillGreen() {
 
 void drawNeutral() {
   background(255, 255, 255);
-  drawPokeBall(14, 0, 0, 0, 255);
-  drawPokeBall(24, 0, 0, 0, 255);
-  drawPokeBall(34, 0, 0, 0, 255);
+  //drawPokeBall(14, 0, 0, 0, 255);
+  //drawPokeBall(24, 0, 0, 0, 255);
+  //drawPokeBall(34, 0, 0, 0, 255);
 }
 
 void drawColorSpiral() {
@@ -195,6 +200,8 @@ void drawPokeBallTransition() {
       aD *= -1;
 
     background(red(b), green(b), blue(b), alpha);
+    fill(0,0,0,alpha);
+    rect(0,0, 100, 100);
     drawPokeBall(14, 0, 0, 0, alpha);
     drawPokeBall(24, 0, 0, 0, alpha);
     drawPokeBall(34, 0, 0, 0, alpha);
@@ -206,7 +213,7 @@ void drawPokeBall(int x, int r, int g, int b, int a) {
   int y = 10;
 
   fill(r, g, b, a);
-  rect(x - 4, 0, 10, 20);
+  //rect(x - 4, 0, 10, 40);
 
   fill (255, 0, 0, a);
   rect(x - 3, y - 4, w, 3);
@@ -225,7 +232,7 @@ void drawPokeBall(int x, int r, int g, int b, int a) {
 void drawEqualizer() {
   fill (0, 0, 0, 200);
   for (int i = 0; i < 40; i ++) {
-    if (frameCount % 10 == 0)       
+    if (frameCount % 1 == 0)       
       newRndNumbers(false);
     rect(i, 0, 1, numbers[i]);
   }
@@ -293,7 +300,7 @@ void drawBattle() {
       rect (rec.x, rec.y, rec.w, rec.h);
     }
   } else {
-    drawEqualizer();
+    drawColorSpiral();
   }
 }
 
@@ -319,9 +326,14 @@ Rect horizontalRect(int x, int y) {
 
 void drawServerUnreachable() {
   backgroundGreen();
-  drawPokeBall(14, 88, 133, 40, 255);
-  drawPokeBall(24, 88, 133, 40, 255);
-  drawPokeBall(34, 88, 133, 40, 255);
+  drawPokeBall(14, 88, 133, 40, unreachAlpha);
+  drawPokeBall(24, 88, 133, 40, unreachAlpha);
+  drawPokeBall(34, 88, 133, 40, unreachAlpha);
+  
+  unreachAlpha += unreachAD;
+  if (unreachAlpha < - 50 || unreachAlpha > 305){
+    unreachAD *= -1;
+  }
 }
 
 void drawGymLevel() {
@@ -373,7 +385,6 @@ void drawNormal() {
   if (!passedTimeToShowBall) {
     drawGymLevel();
   } else {
-    if (!teamColor.equals("NEUTRAL"))
       drawPokeBallTransition();
   }
 }

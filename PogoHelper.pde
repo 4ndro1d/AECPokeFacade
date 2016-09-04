@@ -53,7 +53,7 @@ class PogoHelper implements AECInfoListener { //<>//
     AECInfoUpdated(dummyInfo(true, "BLUE", 0));
     sleep(15000);
     AECInfoUpdated(dummyInfo(false, "", 0));
-    sleep(15000);
+    sleep(30000);
     AECInfoUpdated(dummyInfo(false, "RED", 1));
     sleep(15000);
     AECInfoUpdated(dummyInfo(true, "RED", 1));
